@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Animator animator;
 
+    private PlayerInputController input;
+    [SerializeField] Transform cameraFollowTarget;
+    float xRotation;
+    float yRotation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,5 +54,17 @@ public class PlayerController : MonoBehaviour
 
         var rotationDirection = Quaternion.LookRotation(movementDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotationDirection, rotationSpeed * Time.deltaTime);
+    }
+
+    private void LateUpdate()
+    {
+        cameraRotation();
+    }
+    void cameraRotation() 
+    {
+        /*xRotation += input.look.y;
+        yRotation += input.look.x;
+        Quaternion rotation = Quaternion.Euler(xRotation, yRotation, 0);*/
+        cameraFollowTarget.rotation = Quaternion.identity; //rotation;
     }
 }
