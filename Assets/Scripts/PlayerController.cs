@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 10.0f;
     private Rigidbody rb;
     private Animator animator;
+    private CapsuleCollider capsuleCollider;
 
     private PlayerInputController input;
     [SerializeField] Transform cameraFollowTarget;
@@ -19,12 +20,15 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeedMultiplier = 0.1f;
 
     private bool canCrawl = false;
+    private float originalColliderHeight;
+    private Vector3 originalColliderCenter;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
 
         input = GetComponent<PlayerInputController>();
         if (input == null)
@@ -35,6 +39,13 @@ public class PlayerController : MonoBehaviour
         if (cameraFollowTarget == null)
         {
             Debug.LogError("cameraFollowTarget is not assigned!");
+        }
+
+        // Orijinal collider boyutlarýný ve merkezini kaydet
+        if (capsuleCollider != null)
+        {
+            originalColliderHeight = capsuleCollider.height;
+            originalColliderCenter = capsuleCollider.center;
         }
 
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -61,10 +72,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) && canCrawl)
         {
             animator.SetBool("isCrawling", true);
+            capsuleCollider.height = 0.27f;
+            capsuleCollider.center = new Vector3(-0.006540656f, 0.72f, 0.00657028f);
         }
         else
         {
             animator.SetBool("isCrawling", false);
+            capsuleCollider.height = originalColliderHeight;
+            capsuleCollider.center = originalColliderCenter;
         }
 
         if (movementDirection == Vector3.zero) 
