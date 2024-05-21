@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     float yRotation;
     public float rotationSpeedMultiplier = 0.1f;
 
+    private bool canCrawl = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isWalking", movementDirection != Vector3.zero);
 
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftControl) && canCrawl)
         {
             animator.SetBool("isCrawling", true);
         }
@@ -76,6 +78,8 @@ public class PlayerController : MonoBehaviour
 
         var rotationDirection = Quaternion.LookRotation(movementDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotationDirection, rotationSpeed * Time.deltaTime);
+
+
     }
 
     private void LateUpdate()
@@ -96,4 +100,10 @@ public class PlayerController : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(xRotation, yRotation, 0);
         cameraFollowTarget.rotation = rotation;
     }
+
+    public void EnableCrawling()
+    {
+        canCrawl = true;
+    }
+
 }
