@@ -63,6 +63,7 @@ public class ReadNotes : MonoBehaviour
         if (poison != null)
         {
             Collider poisonCollider = poison.GetComponent<Collider>();
+
             if (poisonCollider != null)
             {
                 poisonCollider.enabled = true; //poison etkinleþtirildi
