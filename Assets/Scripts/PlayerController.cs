@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 
     public float movementSpeed = 2f;
     public float rotationSpeed = 10.0f;
+    public float originalSpeed;
+
     private Rigidbody rb;
     private Animator animator;
     private CapsuleCollider capsuleCollider;
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeedMultiplier = 0.1f;
 
     private bool canCrawl = false;
+    private bool canFaster = false;
     private float originalColliderHeight;
     private Vector3 originalColliderCenter;
 
@@ -48,6 +51,8 @@ public class PlayerController : MonoBehaviour
             originalColliderCenter = capsuleCollider.center;
         }
 
+        originalSpeed = movementSpeed;
+
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
     }
@@ -59,7 +64,7 @@ public class PlayerController : MonoBehaviour
         var vertical = Input.GetAxis("Vertical");
 
         Vector3 cameraForward = Camera.main.transform.forward;
-        cameraForward.y = 0; 
+        cameraForward.y = 0;
         cameraForward.Normalize();
 
         var movementDirection = cameraForward * vertical + Camera.main.transform.right * horizontal;
@@ -82,7 +87,16 @@ public class PlayerController : MonoBehaviour
             capsuleCollider.center = originalColliderCenter;
         }
 
-        if (movementDirection == Vector3.zero) 
+        if (Input.GetKey(KeyCode.LeftShift) && canFaster)
+        {
+            movementSpeed = 5f; // Hýz artýr
+        }
+        else
+        {
+            movementSpeed = originalSpeed; // Orijinal hýza dön
+        }
+
+        if (movementDirection == Vector3.zero)
         {
             Debug.Log("input doesn't exist.");
             rb.velocity = Vector3.zero;
@@ -97,11 +111,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
     private void LateUpdate()
     {
         cameraRotation();
     }
-    void cameraRotation() 
+    void cameraRotation()
     {
         if (input == null)
         {
@@ -116,9 +131,14 @@ public class PlayerController : MonoBehaviour
         cameraFollowTarget.rotation = rotation;
     }
 
-    public void EnableCrawling()
+    public void EnableCrawling() 
     {
         canCrawl = true;
+    }
+
+    public void Faster() 
+    {
+        canFaster = true;
     }
 
 }
