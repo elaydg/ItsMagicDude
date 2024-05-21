@@ -9,5 +9,6 @@ public class PlayerInputController : MonoBehaviour
     void OnLook(InputValue value) 
     {
         look = value.Get<Vector2>();
+        look.y = -look.y; 
     }
 }

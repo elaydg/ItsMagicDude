@@ -16,12 +16,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform cameraFollowTarget;
     float xRotation;
     float yRotation;
+    public float rotationSpeedMultiplier = 0.1f;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+
+        input = GetComponent<PlayerInputController>();
+        if (input == null)
+        {
+            Debug.LogError("PlayerInputController component is missing on this GameObject.");
+        }
+
+        if (cameraFollowTarget == null)
+        {
+            Debug.LogError("cameraFollowTarget is not assigned!");
+        }
+
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -30,7 +45,14 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
 
-        var movementDirection = new Vector3(horizontal, 0, vertical);
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0; 
+        cameraForward.Normalize();
+
+        var movementDirection = cameraForward * vertical + Camera.main.transform.right * horizontal;
+        movementDirection.Normalize();
+
+        //var movementDirection = new Vector3(horizontal, 0, vertical);
 
         animator.SetBool("isWalking", movementDirection != Vector3.zero);
 
@@ -62,9 +84,16 @@ public class PlayerController : MonoBehaviour
     }
     void cameraRotation() 
     {
-        /*xRotation += input.look.y;
-        yRotation += input.look.x;
-        Quaternion rotation = Quaternion.Euler(xRotation, yRotation, 0);*/
-        cameraFollowTarget.rotation = Quaternion.identity; //rotation;
+        if (input == null)
+        {
+            Debug.LogError("PlayerInputController is not assigned.");
+            return;
+        }
+        xRotation += input.look.y * rotationSpeedMultiplier;
+        yRotation += input.look.x * rotationSpeedMultiplier;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        Quaternion rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        cameraFollowTarget.rotation = rotation;
     }
 }
