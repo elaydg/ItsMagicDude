@@ -7,7 +7,7 @@ public class speedPotion : MonoBehaviour
 {
     public GameObject player;
     public GameObject speedText;
-    //public GameObject speedNote;
+    public GameObject speedNote;
 
     public bool inReach = false;
 
@@ -18,7 +18,7 @@ public class speedPotion : MonoBehaviour
     {
         speedText.SetActive(false);
         playerController = player.GetComponent<PlayerController>();
-        //crawlNote.SetActive(false);
+        speedNote.SetActive(false);
 
     }
 
@@ -46,10 +46,10 @@ public class speedPotion : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && inReach)
         {
             potionSpeed();
-            /*speedNote.SetActive(true);
+            speedNote.SetActive(true);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            player.GetComponent<PlayerController>().enabled = false;*/
+            player.GetComponent<PlayerController>().enabled = false;
 
         }
     }
@@ -64,13 +64,13 @@ public class speedPotion : MonoBehaviour
         speedText.SetActive(false);
     }
 
-    /*public void ExitButton()
+    public void ExitButton()
     {
-        crawlNote.SetActive(false);
+        speedNote.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         player.GetComponent<PlayerController>().enabled = true;
 
-    }*/
+    }
 }
 

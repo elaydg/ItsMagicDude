@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift) && canFaster)
         {
-            movementSpeed = 5f; // Hýz artýr
+            movementSpeed = 4f; // Hýz artýr
         }
         else
         {
