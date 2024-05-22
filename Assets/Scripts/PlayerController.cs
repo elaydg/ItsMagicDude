@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         float horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
 
